@@ -1,11 +1,9 @@
 ---
-title: API Reference
+title: Tài liệu kỹ thuật CyStack API
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
-  - ruby
   - python
-  - javascript
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
@@ -17,57 +15,44 @@ includes:
 search: true
 ---
 
-# Introduction
+# Giới thiệu
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Dưới đây là tài liệu hướng dẫn sử dụng CyStack API. Bạn có thể sử dụng các API của chúng tôi để thực hiện các chức năng quản lý trên CyStack Platform. Bằng cách này, bạn có thể tích hợp CyStack Platform vào hệ thống của bạn hoặc tự phát triển một Scanner trên hạ tầng sẵn có của chúng tôi. 
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+Các chức năng mà bạn được phép/không được phép sử dụng thông qua CyStack APIClient
 
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+Chức năng | Truy cập qua API
+-- | -- 
+Tạo target | Không
+Liệt kê và xem thông tin target | Có
+Tạo và xem thông tin scan | Có
+Xem thông tin lỗ hổng | Có
+Xem thông tin và cấu hình Monitoring | Có
+Quản lý thông tin người dùng | Không
+Quản lý danh sách nhận tin (notifications) | Không
+Quản lý API Keys | Không
 
-# Authentication
-
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+Chúng tôi có các đoạn code mẫu được viết bằng Shell và Python. Bạn có thể tham khảo ở cột bên phải, ứng với các chức năng được cung cấp. Việc truy cập API bằng các ngôn ngữ lập trình khác hoàn toàn tương tự.
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+Lưu ý: Các API không thuộc phạm vi tài liệu này được dành cho những mục đích khác của CyStack Team. Các developer <b>không nên sử dụng</b> chúng nếu không được phép.
 </aside>
 
-# Kittens
+# Xác thực
 
-## Get All Kittens
+CyStack Platform sử dụng hình thức xác thực thông qua API key (Bearer Token) cho tất cả các request từ Client gửi đến API Server. Bạn có thể tạo mới một API key từ trang [Quản lý API key](https://cystack.io/apikeys).
+
+Sau khi đã có được API key, bạn phải thêm vào header của tất cả các request key/value sau:
+
+`Authorization: Bearer cystackapiexample`
+
+<aside class="notice">
+Bạn phải thay <code>cystackapiexample</code> bằng API key thật của bạn.
+</aside>
+
+# Target
+
+## Liệt kê danh sách target
 
 ```ruby
 require 'kittn'
