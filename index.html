@@ -359,7 +359,47 @@ Bạn phải thay <code>cystackapiexample</code> bằng API key thật của b�
 </tr>
 <tr>
 <td>ordering</td>
-<td>Giá trị được ưu tiên sắp xếp. Giá trị tham số hợp lệ <code>?ordering=target</code>, <code>?ordering=verification</code>, <code>?ordering=target, verification</code>. Nếu muốn sắp xếp theo chiều ngược lại, thêm dấu &#39;-&#39; vào trước giá trị cần sắp xếp chẳng hạn <code>?ordering=-target</code></td>
+<td>Giá trị được ưu tiên sắp xếp. Giá trị tham số hợp lệ <code>?ordering=target</code>, <code>?ordering=verification</code>, <code>?ordering=target,verification</code>. Nếu muốn sắp xếp theo chiều ngược lại, thêm dấu <code>-</code> vào trước giá trị cần sắp xếp chẳng hạn <code>?ordering=-target</code></td>
+</tr>
+</tbody></table>
+<h3 id='y-nghia-k-t-qu-tr-v'>Ý nghĩa kết quả trả về</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Mô tả</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>count</td>
+<td>Số lượng kết quả lấy được</td>
+</tr>
+<tr>
+<td>next</td>
+<td>URL trang kết quả tiếp theo, nếu trang tiếp theo không có dữ liệu thì trả về <code>null</code></td>
+</tr>
+<tr>
+<td>previous</td>
+<td>URL trang kết quả phía trước, nếu trang trước không có dữ liệu thì trả về <code>null</code></td>
+</tr>
+<tr>
+<td>results</td>
+<td>Một mảng các đối tượng target, trong đó các thành phần được mô tả dưới đây</td>
+</tr>
+<tr>
+<td>verification</td>
+<td>Tình trạng xác thực chủ sở hữu, là 0/1 đại diện cho <code>đã xác thực chủ sở hữu</code> / <code>chưa xác thực chủ sở hữu</code></td>
+</tr>
+<tr>
+<td>href</td>
+<td>Đường dẫn đến endpoint xem thông tin chi tiết target. Địa chỉ tuyệt đối = <code>https://api.cystack.io</code> + <code>đường dẫn</code></td>
+</tr>
+<tr>
+<td>id</td>
+<td>ID của target</td>
+</tr>
+<tr>
+<td>address</td>
+<td>Địa chỉ truy cập target</td>
 </tr>
 </tbody></table>
 
