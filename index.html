@@ -342,6 +342,26 @@ Bạn phải thay <code>cystackapiexample</code> bằng API key thật của b�
 <p>Endpoint này liệt kê tất cả các target hiện có của user (ứng với API key)</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET https://api.cystack.io/v1/targets</code></p>
+<h3 id='cac-tham-s-theo-url'>Các tham số theo URL</h3>
+<table><thead>
+<tr>
+<th>Tham số</th>
+<th>Mô tả</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>page</td>
+<td>Mặc định, kết quả trả về sẽ được phân trang với 10 kết quả/trang. Tham số pgae nhận vào một số tự nhiên đại diện cho trang cần lấy</td>
+</tr>
+<tr>
+<td>q</td>
+<td>Từ khóa dùng để lọc target</td>
+</tr>
+<tr>
+<td>ordering</td>
+<td>Giá trị được ưu tiên sắp xếp. Giá trị tham số hợp lệ <code>?ordering=target</code>, <code>?ordering=verification</code>, <code>?ordering=target, verification</code>. Nếu muốn sắp xếp theo chiều ngược lại, thêm dấu &#39;-&#39; vào trước giá trị cần sắp xếp chẳng hạn <code>?ordering=-target</code></td>
+</tr>
+</tbody></table>
 
 <aside class="success">
 Lưu ý — Request phải gửi kèm API Key
