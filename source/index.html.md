@@ -260,7 +260,7 @@ curl "https://api.cystack.io/v1/scans/9ba42a5f-f31d-4f18-9812-c7f18eca09e8"
 }
 ```
 
-Endpoint này liệt kê tất cả các scan hiện có của user (ứng với API key)
+Endpoint này trả về thông tin chi tiết của 1 scan
 
 ### HTTP Request
 
@@ -363,3 +363,100 @@ name | Tên của lỗi
 href | Đường dẫn đến endpoint xem thông tin chi tiết vulnerability
 id | ID của vulnerability
 target | Địa chỉ của target
+
+## Xem chi tiết lỗ hổng
+
+```python
+import requests
+import json
+
+ROOT_URL = 'https://api.cystack.io/v1'
+API_KEY = 'cystackapiexample'
+AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
+
+
+def detail_vulnerability(vuln_id):
+    endpoint = "%s/vulnerabilities/%s" % (ROOT_URL, vuln_id)
+    r = requests.get(endpoint, headers=AUTHENTICATION_HEADER)
+    return json.loads(r.text)
+
+
+print detail_vulnerability('060d674c-fb48-4182-83db-85e0323b8fd1')
+```
+
+```shell
+curl "https://api.cystack.io/v1/vulnerabilities/060d674c-fb48-4182-83db-85e0323b8fd1"
+  -H "Authorization: Bearer cystackapiexample"
+```
+
+> Nếu thành công, kết quả nhận được sẽ là JSON như sau:
+
+```json
+{
+  "traffic_hrefs": [
+    "/v1/vulnerabilities/060d674c-fb48-4182-83db-85e0323b8fd1/traffics/5a1b8babcca1e02c146c4afa"
+  ],
+  "description": "The whole target has no protection (X-Frame-Options header) against Click-Jacking attacksClickjacking (User Interface redress attack, UI redress attack, UI redressing) is a malicious technique of tricking a Web user into clicking on something different from what the user perceives they are clicking on, thus potentially revealing confidential information or taking control of their computer while clicking on seemingly innocuous web pages.\n\nThe server didn't return an `X-Frame-Options` header which means that this website could be at risk of a clickjacking attack. The `X-Frame-Options` HTTP response header can be used to indicate whether or not a browser should be allowed to render a page inside a frame or iframe. Sites can use this to avoid clickjacking attacks, by ensuring that their content is not embedded into other sites.",
+  "scan": {
+    "target": {
+      "id": "395a2f59-ad32-4e1c-b9b0-4063a55cf4e2",
+      "address": "https://cystack.net"
+    },
+    "id": "06b804ed-2775-4e35-90d2-bd5a047762c3"
+  },
+  "severity": "Medium",
+  "solution": "Configure your web server to include an X-Frame-Options header.",
+  "plugin_name": "click_jacking",
+  "false_positive": false,
+  "references": [
+    {
+      "url": "http://tools.ietf.org/html/rfc7034",
+      "title": "RFC-7034"
+    },
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/X-Frame-Options",
+      "title": "Mozilla developer network"
+    },
+    {
+      "url": "https://www.owasp.org/index.php/Clickjacking",
+      "title": "OWASP Clickjacking document"
+    },
+    {
+      "url": "http://vulndb.github.io/vuln/53",
+      "title": "Vulndb-53"
+    }
+  ],
+  "urls": [
+    "None"
+  ],
+  "var": "",
+  "attributes": {},
+  "id": "060d674c-fb48-4182-83db-85e0323b8fd1",
+  "name": "Click-Jacking vulnerability"
+}
+```
+
+Endpoint này trả về thông tin chi tiết của 1 vulnerability
+
+### HTTP Request
+
+`GET https://api.cystack.io/v1/vulnerabilities/<vuln_id>`
+
+### Ý nghĩa kết quả trả về
+
+Key | Mô tả
+--------- | -----------
+traffic_hrefs | Danh sách href các traffic của vulnerability
+description | Mô tả về lỗi
+severity | Mức độ nguy hiểm của vulnerability
+solution | Cách xử lý vulnerability
+plugin_name | Tên plugin phát hiện ra lỗi
+false_positive | Lỗi có phải false positive hay không
+scan | Thông tin về đối tượng scan, trong đó bao gồm scan_id và target
+references | Danh sách các tài liệu tham chiếu đến lỗi
+urls | Danh sách các URL bị lỗi
+var | Tham số chứa lỗi
+attributes | Các thuộc tính của lỗi (nâng cao)
+id | ID của lỗi
+name | Tên của lỗi
+
