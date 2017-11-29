@@ -240,10 +240,27 @@
                     <a href="#khai-ni-m" class="toc-h2 toc-link" data-title="Khái niệm">Khái niệm</a>
                   </li>
                   <li>
-                    <a href="#li-t-ke-danh-sach-scan" class="toc-h2 toc-link" data-title="Liệt kê danh sách scan">Liệt kê danh sách scan</a>
+                    <a href="#li-t-ke-scan" class="toc-h2 toc-link" data-title="Liệt kê scan">Liệt kê scan</a>
                   </li>
                   <li>
                     <a href="#xem-chi-ti-t-m-t-scan" class="toc-h2 toc-link" data-title="Xem chi tiết một scan">Xem chi tiết một scan</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#vulnerability" class="toc-h1 toc-link" data-title="Vulnerability">Vulnerability</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#khai-ni-m-2" class="toc-h2 toc-link" data-title="Khái niệm">Khái niệm</a>
+                  </li>
+                  <li>
+                    <a href="#li-t-ke-l-h-ng" class="toc-h2 toc-link" data-title="Liệt kê lỗ hổng">Liệt kê lỗ hổng</a>
+                  </li>
+                  <li>
+                    <a href="#xem-chi-ti-t-l-h-ng" class="toc-h2 toc-link" data-title="Xem chi tiết lỗ hổng">Xem chi tiết lỗ hổng</a>
+                  </li>
+                  <li>
+                    <a href="#c-p-nh-t-l-h-ng" class="toc-h2 toc-link" data-title="Cập nhật lỗ hổng">Cập nhật lỗ hổng</a>
                   </li>
               </ul>
           </li>
@@ -422,7 +439,7 @@ Lưu ý — Request phải gửi kèm API Key
 </aside>
 <h1 id='scan'>Scan</h1><h2 id='khai-ni-m'>Khái niệm</h2>
 <p>Một scan tương ứng với một lần quét lỗ hổng, trên một target xác định</p>
-<h2 id='li-t-ke-danh-sach-scan'>Liệt kê danh sách scan</h2><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+<h2 id='li-t-ke-scan'>Liệt kê scan</h2><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
 <span class="n">ROOT_URL</span> <span class="o">=</span> <span class="s">'https://api.cystack.io/v1'</span>
@@ -589,7 +606,7 @@ Lưu ý — Request phải gửi kèm API Key
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>Endpoint này liệt kê tất cả các scan hiện có của user (ứng với API key)</p>
+<p>Endpoint này trả về thông tin chi tiết của 1 scan</p>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>GET https://api.cystack.io/v1/scans/&lt;scan_id&gt;</code></p>
 <h3 id='y-nghia-k-t-qu-tr-v-3'>Ý nghĩa kết quả trả về</h3>
@@ -646,6 +663,389 @@ Lưu ý — Request phải gửi kèm API Key
 <tr>
 <td>address</td>
 <td>Địa chỉ của target</td>
+</tr>
+</tbody></table>
+<h1 id='vulnerability'>Vulnerability</h1><h2 id='khai-ni-m-2'>Khái niệm</h2>
+<p>Một Vulnerability tương ứng với một lỗ hổng tìm được sau khi scan</p>
+<h2 id='li-t-ke-l-h-ng'>Liệt kê lỗ hổng</h2><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">ROOT_URL</span> <span class="o">=</span> <span class="s">'https://api.cystack.io/v1'</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="s">'cystackapiexample'</span>
+<span class="n">AUTHENTICATION_HEADER</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Authorization'</span><span class="p">:</span> <span class="s">'Bearer </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">API_KEY</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">list_vulnerability</span><span class="p">():</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="s">"</span><span class="si">%</span><span class="s">s/vulnerabilities"</span> <span class="o">%</span> <span class="n">ROOT_URL</span>
+    <span class="k">print</span> <span class="n">endpoint</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">AUTHENTICATION_HEADER</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+
+<span class="k">print</span> <span class="n">list_vulnerability</span><span class="p">()</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.cystack.io/v1/vulnerabilities"</span>
+  -H <span class="s2">"Authorization: Bearer cystackapiexample"</span>
+</code></pre>
+<blockquote>
+<p>Nếu thành công, kết quả nhận được sẽ là JSON như sau:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cystack.io/v1/vulnerabilities?page=2"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"false_positive"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"severity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Medium"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Click-Jacking vulnerability"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/vulnerabilities/060d674c-fb48-4182-83db-85e0323b8fd1"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"060d674c-fb48-4182-83db-85e0323b8fd1"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cystack.net"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Endpoint này liệt kê tất cả các lỗ hổng hiện có của user (ứng với API key)</p>
+<h3 id='http-request-4'>HTTP Request</h3>
+<p><code>GET https://api.cystack.io/v1/vulnerabilities</code></p>
+<h3 id='cac-tham-s-theo-url-3'>Các tham số theo URL</h3>
+<table><thead>
+<tr>
+<th>Tham số</th>
+<th>Mô tả</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>page</td>
+<td>Mặc định, kết quả trả về sẽ được phân trang với 10 kết quả/trang. Tham số page nhận vào một số tự nhiên đại diện cho trang cần lấy</td>
+</tr>
+<tr>
+<td>q</td>
+<td>Từ khóa dùng để lọc vulnerability và target</td>
+</tr>
+<tr>
+<td>ordering</td>
+<td>Giá trị được ưu tiên sắp xếp. Giá trị tham số hợp lệ <code>?ordering=severity</code>, <code>?ordering=target</code>, <code>ordering=false_positive</code>, <code>ordering=name</code>, <code>?ordering=severity,false_positive,name,target</code>. Nếu muốn sắp xếp theo chiều ngược lại, thêm dấu <code>-</code> vào trước giá trị cần sắp xếp chẳng hạn <code>?ordering=-target</code></td>
+</tr>
+<tr>
+<td>sev</td>
+<td>Lọc theo mức độ nguy hiểm của lỗi, các giá trị hợp lệ bao gồm <code>High</code>, <code>Medium</code>, <code>Low</code>, <code>Information</code></td>
+</tr>
+</tbody></table>
+<h3 id='y-nghia-k-t-qu-tr-v-4'>Ý nghĩa kết quả trả về</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Mô tả</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>count</td>
+<td>Số lượng kết quả lấy được</td>
+</tr>
+<tr>
+<td>next</td>
+<td>URL trang kết quả tiếp theo, nếu trang tiếp theo không có dữ liệu thì trả về <code>null</code></td>
+</tr>
+<tr>
+<td>previous</td>
+<td>URL trang kết quả phía trước, nếu trang trước không có dữ liệu thì trả về <code>null</code></td>
+</tr>
+<tr>
+<td>results</td>
+<td>Một mảng các đối tượng vulnerabilities, trong đó các thành phần được mô tả dưới đây</td>
+</tr>
+<tr>
+<td>false_positive</td>
+<td>Lỗi có phải false positive hay không</td>
+</tr>
+<tr>
+<td>severity</td>
+<td>Mức độ nguy hiểm của lỗi</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Tên của lỗi</td>
+</tr>
+<tr>
+<td>href</td>
+<td>Đường dẫn đến endpoint xem thông tin chi tiết vulnerability</td>
+</tr>
+<tr>
+<td>id</td>
+<td>ID của vulnerability</td>
+</tr>
+<tr>
+<td>target</td>
+<td>Địa chỉ của target</td>
+</tr>
+</tbody></table>
+<h2 id='xem-chi-ti-t-l-h-ng'>Xem chi tiết lỗ hổng</h2><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">ROOT_URL</span> <span class="o">=</span> <span class="s">'https://api.cystack.io/v1'</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="s">'cystackapiexample'</span>
+<span class="n">AUTHENTICATION_HEADER</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Authorization'</span><span class="p">:</span> <span class="s">'Bearer </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">API_KEY</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">detail_vulnerability</span><span class="p">(</span><span class="n">vuln_id</span><span class="p">):</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="s">"</span><span class="si">%</span><span class="s">s/vulnerabilities/</span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">ROOT_URL</span><span class="p">,</span> <span class="n">vuln_id</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">AUTHENTICATION_HEADER</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+
+<span class="k">print</span> <span class="n">detail_vulnerability</span><span class="p">(</span><span class="s">'060d674c-fb48-4182-83db-85e0323b8fd1'</span><span class="p">)</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.cystack.io/v1/vulnerabilities/060d674c-fb48-4182-83db-85e0323b8fd1"</span>
+  -H <span class="s2">"Authorization: Bearer cystackapiexample"</span>
+</code></pre>
+<blockquote>
+<p>Nếu thành công, kết quả nhận được sẽ là JSON như sau:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"traffic_hrefs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"/v1/vulnerabilities/060d674c-fb48-4182-83db-85e0323b8fd1/traffics/5a1b8babcca1e02c146c4afa"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The whole target has no protection (X-Frame-Options header) against Click-Jacking attacksClickjacking (User Interface redress attack, UI redress attack, UI redressing) is a malicious technique of tricking a Web user into clicking on something different from what the user perceives they are clicking on, thus potentially revealing confidential information or taking control of their computer while clicking on seemingly innocuous web pages.</span><span class="se">\n\n</span><span class="s2">The server didn't return an `X-Frame-Options` header which means that this website could be at risk of a clickjacking attack. The `X-Frame-Options` HTTP response header can be used to indicate whether or not a browser should be allowed to render a page inside a frame or iframe. Sites can use this to avoid clickjacking attacks, by ensuring that their content is not embedded into other sites."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"scan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"target"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"395a2f59-ad32-4e1c-b9b0-4063a55cf4e2"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cystack.net"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"06b804ed-2775-4e35-90d2-bd5a047762c3"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"severity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Medium"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"solution"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Configure your web server to include an X-Frame-Options header."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"plugin_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"click_jacking"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"false_positive"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"references"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://tools.ietf.org/html/rfc7034"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RFC-7034"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://developer.mozilla.org/en-US/docs/Web/HTTP/X-Frame-Options"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla developer network"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.owasp.org/index.php/Clickjacking"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OWASP Clickjacking document"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://vulndb.github.io/vuln/53"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Vulndb-53"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"urls"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"None"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"var"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"060d674c-fb48-4182-83db-85e0323b8fd1"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Click-Jacking vulnerability"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Endpoint này trả về thông tin chi tiết của 1 vulnerability</p>
+<h3 id='http-request-5'>HTTP Request</h3>
+<p><code>GET https://api.cystack.io/v1/vulnerabilities/&lt;vuln_id&gt;</code></p>
+<h3 id='y-nghia-k-t-qu-tr-v-5'>Ý nghĩa kết quả trả về</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Mô tả</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>traffic_hrefs</td>
+<td>Danh sách href các traffic của vulnerability</td>
+</tr>
+<tr>
+<td>description</td>
+<td>Mô tả về lỗi</td>
+</tr>
+<tr>
+<td>severity</td>
+<td>Mức độ nguy hiểm của vulnerability</td>
+</tr>
+<tr>
+<td>solution</td>
+<td>Cách xử lý vulnerability</td>
+</tr>
+<tr>
+<td>plugin_name</td>
+<td>Tên plugin phát hiện ra lỗi</td>
+</tr>
+<tr>
+<td>false_positive</td>
+<td>Lỗi có phải false positive hay không</td>
+</tr>
+<tr>
+<td>scan</td>
+<td>Thông tin về đối tượng scan, trong đó bao gồm scan_id và target</td>
+</tr>
+<tr>
+<td>references</td>
+<td>Danh sách các tài liệu tham chiếu đến lỗi</td>
+</tr>
+<tr>
+<td>urls</td>
+<td>Danh sách các URL bị lỗi</td>
+</tr>
+<tr>
+<td>var</td>
+<td>Tham số chứa lỗi</td>
+</tr>
+<tr>
+<td>attributes</td>
+<td>Các thuộc tính của lỗi (nâng cao)</td>
+</tr>
+<tr>
+<td>id</td>
+<td>ID của lỗi</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Tên của lỗi</td>
+</tr>
+</tbody></table>
+<h2 id='c-p-nh-t-l-h-ng'>Cập nhật lỗ hổng</h2><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">ROOT_URL</span> <span class="o">=</span> <span class="s">'https://api.cystack.io/v1'</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="s">'cystackapiexample'</span>
+<span class="n">AUTHENTICATION_HEADER</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Authorization'</span><span class="p">:</span> <span class="s">'Bearer </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">API_KEY</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">update_vulnerability</span><span class="p">(</span><span class="n">vuln_id</span><span class="p">):</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="s">"</span><span class="si">%</span><span class="s">s/vulnerabilities/</span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">ROOT_URL</span><span class="p">,</span> <span class="n">vuln_id</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s">"false_positive"</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">AUTHENTICATION_HEADER</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+
+<span class="k">print</span> <span class="n">update_vulnerability</span><span class="p">(</span><span class="s">'060d674c-fb48-4182-83db-85e0323b8fd1'</span><span class="p">)</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl -i -s -k  -X <span class="s1">'PUT'</span> <span class="s2">"https://api.cystack.io/v1/vulnerabilities/060d674c-fb48-4182-83db-85e0323b8fd1"</span> <span class="se">\</span>
+    -H <span class="s2">"Authorization: Bearer cystackapiexample"</span> <span class="se">\</span>
+    --data-binary <span class="s1">$'{</span><span class="se">\"</span><span class="s1">false_positive</span><span class="se">\"</span><span class="s1">:true}'</span> 
+</code></pre>
+<blockquote>
+<p>Nếu thành công, kết quả nhận được sẽ là JSON như sau:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"traffic_hrefs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"/v1/vulnerabilities/060d674c-fb48-4182-83db-85e0323b8fd1/traffics/5a1b8babcca1e02c146c4afa"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The whole target has no protection (X-Frame-Options header) against Click-Jacking attacksClickjacking (User Interface redress attack, UI redress attack, UI redressing) is a malicious technique of tricking a Web user into clicking on something different from what the user perceives they are clicking on, thus potentially revealing confidential information or taking control of their computer while clicking on seemingly innocuous web pages.</span><span class="se">\n\n</span><span class="s2">The server didn't return an `X-Frame-Options` header which means that this website could be at risk of a clickjacking attack. The `X-Frame-Options` HTTP response header can be used to indicate whether or not a browser should be allowed to render a page inside a frame or iframe. Sites can use this to avoid clickjacking attacks, by ensuring that their content is not embedded into other sites."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"scan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"target"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"395a2f59-ad32-4e1c-b9b0-4063a55cf4e2"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cystack.net"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"06b804ed-2775-4e35-90d2-bd5a047762c3"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"severity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Medium"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"solution"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Configure your web server to include an X-Frame-Options header."</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"plugin_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"click_jacking"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"false_positive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"references"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://tools.ietf.org/html/rfc7034"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RFC-7034"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://developer.mozilla.org/en-US/docs/Web/HTTP/X-Frame-Options"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla developer network"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.owasp.org/index.php/Clickjacking"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OWASP Clickjacking document"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://vulndb.github.io/vuln/53"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Vulndb-53"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"urls"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"None"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"var"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"060d674c-fb48-4182-83db-85e0323b8fd1"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Click-Jacking vulnerability"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Endpoint này giúp cập nhật trạng thái <code>false_positive</code> của một lỗi</p>
+<h3 id='http-request-6'>HTTP Request</h3>
+<p><code>PUT https://api.cystack.io/v1/vulnerabilities/&lt;vuln_id&gt;</code></p>
+<h3 id='cac-tham-s-trong-json-body'>Các tham số trong json body</h3>
+<table><thead>
+<tr>
+<th>Tham số</th>
+<th>Mô tả</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>false_positive</td>
+<td>Cho biết lỗi này có bị false positive hay không. Các giá trị hợp lệ là <code>true</code> và <code>false</code></td>
+</tr>
+</tbody></table>
+<h3 id='y-nghia-k-t-qu-tr-v-6'>Ý nghĩa kết quả trả về</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Mô tả</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>traffic_hrefs</td>
+<td>Danh sách href các traffic của vulnerability</td>
+</tr>
+<tr>
+<td>description</td>
+<td>Mô tả về lỗi</td>
+</tr>
+<tr>
+<td>severity</td>
+<td>Mức độ nguy hiểm của vulnerability</td>
+</tr>
+<tr>
+<td>solution</td>
+<td>Cách xử lý vulnerability</td>
+</tr>
+<tr>
+<td>plugin_name</td>
+<td>Tên plugin phát hiện ra lỗi</td>
+</tr>
+<tr>
+<td>false_positive</td>
+<td>Lỗi có phải false positive hay không</td>
+</tr>
+<tr>
+<td>scan</td>
+<td>Thông tin về đối tượng scan, trong đó bao gồm scan_id và target</td>
+</tr>
+<tr>
+<td>references</td>
+<td>Danh sách các tài liệu tham chiếu đến lỗi</td>
+</tr>
+<tr>
+<td>urls</td>
+<td>Danh sách các URL bị lỗi</td>
+</tr>
+<tr>
+<td>var</td>
+<td>Tham số chứa lỗi</td>
+</tr>
+<tr>
+<td>attributes</td>
+<td>Các thuộc tính của lỗi (nâng cao)</td>
+</tr>
+<tr>
+<td>id</td>
+<td>ID của lỗi</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Tên của lỗi</td>
 </tr>
 </tbody></table>
 <h1 id='errors'>Errors</h1>
