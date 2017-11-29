@@ -131,7 +131,7 @@ Lưu ý — Request phải gửi kèm API Key
 ## Khái niệm
 Một scan tương ứng với một lần quét lỗ hổng, trên một target xác định
 
-## Liệt kê danh sách scan
+## Liệt kê scan
 
 ```python
 import requests
@@ -283,3 +283,83 @@ os | Hệ điều hành mà target đang sử dụng, trong trường hợp khô
 id | ID của target
 address | Địa chỉ của target
 
+# Vulnerability
+
+## Khái niệm
+Một Vulnerability tương ứng với một lỗ hổng tìm được sau khi scan
+
+## Liệt kê lỗ hổng
+
+```python
+import requests
+import json
+
+ROOT_URL = 'https://api.cystack.io/v1'
+API_KEY = 'cystackapiexample'
+AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
+
+
+def list_vulnerability():
+    endpoint = "%s/vulnerabilities" % ROOT_URL
+    print endpoint
+    r = requests.get(endpoint, headers=AUTHENTICATION_HEADER)
+    return json.loads(r.text)
+
+
+print list_vulnerability()
+```
+
+```shell
+curl "https://api.cystack.io/v1/vulnerabilities"
+  -H "Authorization: Bearer cystackapiexample"
+```
+
+> Nếu thành công, kết quả nhận được sẽ là JSON như sau:
+
+```json
+{
+  "count": 2,
+  "next": "https://cystack.io/v1/vulnerabilities?page=2",
+  "previous": null,
+  "results": [
+    {
+      "false_positive": false,
+      "severity": "Medium",
+      "name": "Click-Jacking vulnerability",
+      "href": "/v1/vulnerabilities/060d674c-fb48-4182-83db-85e0323b8fd1",
+      "id": "060d674c-fb48-4182-83db-85e0323b8fd1",
+      "target": "https://cystack.net"
+    }
+  ]
+}
+```
+
+Endpoint này liệt kê tất cả các lỗ hổng hiện có của user (ứng với API key)
+
+### HTTP Request
+
+`GET https://api.cystack.io/v1/vulnerabilities`
+
+### Các tham số theo URL
+
+Tham số | Mô tả
+--------- | -----------
+page | Mặc định, kết quả trả về sẽ được phân trang với 10 kết quả/trang. Tham số page nhận vào một số tự nhiên đại diện cho trang cần lấy
+q | Từ khóa dùng để lọc vulnerability và target
+ordering | Giá trị được ưu tiên sắp xếp. Giá trị tham số hợp lệ `?ordering=severity`, `?ordering=target`, `ordering=false_positive`, `ordering=name`, `?ordering=severity,false_positive,name,target`. Nếu muốn sắp xếp theo chiều ngược lại, thêm dấu `-` vào trước giá trị cần sắp xếp chẳng hạn `?ordering=-target`
+sev | Lọc theo mức độ nguy hiểm của lỗi, các giá trị hợp lệ bao gồm `High`, `Medium`, `Low`, `Information`
+
+### Ý nghĩa kết quả trả về
+
+Key | Mô tả
+--------- | -----------
+count | Số lượng kết quả lấy được
+next | URL trang kết quả tiếp theo, nếu trang tiếp theo không có dữ liệu thì trả về `null`
+previous | URL trang kết quả phía trước, nếu trang trước không có dữ liệu thì trả về `null`
+results | Một mảng các đối tượng vulnerabilities, trong đó các thành phần được mô tả dưới đây
+false_positive | Lỗi có phải false positive hay không
+severity | Mức độ nguy hiểm của lỗi
+name | Tên của lỗi
+href | Đường dẫn đến endpoint xem thông tin chi tiết vulnerability
+id | ID của vulnerability
+target | Địa chỉ của target
