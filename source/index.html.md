@@ -58,13 +58,13 @@ Bạn phải thay <code>cystackapiexample</code> bằng API key thật của b�
 import requests
 import json
 
-ROOT_URL = 'https://api.cystack.io'
+ROOT_URL = 'https://api.cystack.io/v1'
 API_KEY = 'cystackapiexample'
 AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
 
 
 def list_target():
-    endpoint = "%s/v1/targets" % ROOT_URL
+    endpoint = "%s/targets" % ROOT_URL
     r = requests.get(endpoint, headers=AUTHENTICATION_HEADER)
     return json.loads(r.text)
 
@@ -137,13 +137,13 @@ Một scan tương ứng với một lần quét lỗ hổng, trên một target
 import requests
 import json
 
-ROOT_URL = 'https://api.cystack.io'
+ROOT_URL = 'https://api.cystack.io/v1'
 API_KEY = 'cystackapiexample'
 AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
 
 
 def list_scan():
-    endpoint = "%s/v1/scans" % ROOT_URL
+    endpoint = "%s/scans" % ROOT_URL
     r = requests.get(endpoint, headers=AUTHENTICATION_HEADER)
     return json.loads(r.text)
 ```
