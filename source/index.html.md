@@ -211,6 +211,75 @@ os | Hệ điều hành mà target đang sử dụng, trong trường hợp khô
 id | ID của target
 address | Địa chỉ của target
 
-<aside class="notice">
-Lưu ý — Request phải gửi kèm API Key
-</aside>
+## Xem chi tiết một scan
+
+```python
+import requests
+import json
+
+ROOT_URL = 'https://api.cystack.io/v1'
+API_KEY = 'cystackapiexample'
+AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
+
+
+def detail_scan(scan_id):
+    endpoint = "%s/scans/%s" % (ROOT_URL, scan_id)
+    r = requests.get(endpoint, headers=AUTHENTICATION_HEADER)
+    return json.loads(r.text)
+    
+print detail_scan("9ba42a5f-f31d-4f18-9812-c7f18eca09e8")
+```
+
+```shell
+curl "https://api.cystack.io/v1/scans/9ba42a5f-f31d-4f18-9812-c7f18eca09e8"
+  -H "Authorization: Bearer cystackapiexample"
+```
+
+> Nếu thành công, kết quả nhận được sẽ là JSON như sau:
+
+```json
+{
+  "status": "Stopped",
+  "profile": "Full Audit",
+  "description": "None",
+  "noti_href": [
+    "/v1/notifications/29"
+  ],
+  "start_time": 1511957637,
+  "stop_time": 1511958637,
+  "vuln_href": [
+    "/v1/vulnerabilities/4b2dad22-3fc7-4719-a67c-2bcd0317b632",
+    "/v1/vulnerabilities/5c067b1e-ffc6-41fc-9678-352cd391cc3d",
+  ],
+  "target": {
+    "ip": "42.112.22.134",
+    "os": "Unknown",
+    "id": "395a2f59-ad32-4e1c-b9b0-4063a55cf4e2",
+    "address": "https://cystack.net"
+  }
+}
+```
+
+Endpoint này liệt kê tất cả các scan hiện có của user (ứng với API key)
+
+### HTTP Request
+
+`GET https://api.cystack.io/v1/scans/<scan_id>`
+
+### Ý nghĩa kết quả trả về
+
+Key | Mô tả
+--------- | -----------
+status | Trạng thái của Scan
+profile | Tên profile scan được sử dụng trong scan này
+description | Mô tả về scan
+start_time | Thời gian bắt đầu scan
+start_time | Thời gian kết thúc scan
+noti_href | Một danh sách tham chiếu đến những người được notify
+vuln_href | Một danh sách tham chiếu đến các lỗ hổng tìm thấy
+target | Một dictionary chứa các thông tin của target
+ip | IP của target
+os | Hệ điều hành mà target đang sử dụng, trong trường hợp không xác định được thì trả về `Unknown`
+id | ID của target
+address | Địa chỉ của target
+
