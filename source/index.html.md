@@ -6,8 +6,8 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - python
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
+  - <a href='https://cystack.io/apikeys'>Tạo API Key</a>
+  - <a href='/'>English</a>
 
 includes:
   - errors
@@ -54,171 +54,163 @@ Bạn phải thay <code>cystackapiexample</code> bằng API key thật của b�
 
 ## Liệt kê danh sách target
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
 ```python
-import kittn
+import requests
+import json
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
+ROOT_URL = 'https://api.cystack.io'
+API_KEY = 'cystackapiexample'
+AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
+
+
+def list_target():
+    endpoint = "%s/v1/targets" % ROOT_URL
+    r = requests.get(endpoint, headers=AUTHENTICATION_HEADER)
+    return json.loads(r.text)
+
+print list_target()	
 ```
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl "https://api.cystack.io/v1/targets"
+  -H "Authorization: Bearer cystackapiexample"
 ```
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
+> Nếu thành công, kết quả nhận được sẽ là JSON như sau:
 
 ```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
+{  
+   "count":1,
+   "next":null,
+   "previous":null,
+   "results":[  
+      {  
+         "verification":0,
+         "href":"/v1/targets/599fc347-3e46-4163-8a1d-444bd1928a85",
+         "id":"599fc347-3e46-4163-8a1d-444bd1928a85",
+         "address":"https://cystack.net"
+      }
+   ]
+}
 ```
 
-This endpoint retrieves all kittens.
+Endpoint này liệt kê tất cả các target hiện có của user (ứng với API key)
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET https://api.cystack.io/v1/targets`
 
-### Query Parameters
+### Các tham số theo URL
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+Tham số | Mô tả
+--------- | -----------
+page | Mặc định, kết quả trả về sẽ được phân trang với 10 kết quả/trang. Tham số page nhận vào một số tự nhiên đại diện cho trang cần lấy
+q | Từ khóa dùng để lọc target
+ordering | Giá trị được ưu tiên sắp xếp. Giá trị tham số hợp lệ `?ordering=target`, `?ordering=verification`, `?ordering=target,verification`. Nếu muốn sắp xếp theo chiều ngược lại, thêm dấu `-` vào trước giá trị cần sắp xếp chẳng hạn `?ordering=-target`
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+### Ý nghĩa kết quả trả về
+
+Key | Mô tả
+--------- | -----------
+count | Số lượng kết quả lấy được
+next | URL trang kết quả tiếp theo, nếu trang tiếp theo không có dữ liệu thì trả về `null`
+previous | URL trang kết quả phía trước, nếu trang trước không có dữ liệu thì trả về `null`
+results | Một mảng các đối tượng target, trong đó các thành phần được mô tả dưới đây
+verification | Tình trạng xác thực chủ sở hữu, là 0/1 đại diện cho `đã xác thực chủ sở hữu` / `chưa xác thực chủ sở hữu`
+href | Đường dẫn đến endpoint xem thông tin chi tiết target. Địa chỉ tuyệt đối = `https://api.cystack.io` + `đường dẫn`
+id | ID của target
+address | Địa chỉ truy cập target
+
+
+<aside class="notice">
+Lưu ý — Request phải gửi kèm API Key
 </aside>
 
-## Get a Specific Kitten
+# Scan
 
-```ruby
-require 'kittn'
+## Khái niệm
+Một scan tương ứng với một lần quét lỗ hổng, trên một target xác định
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
+## Liệt kê danh sách scan
 
 ```python
-import kittn
+import requests
+import json
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+ROOT_URL = 'https://api.cystack.io'
+API_KEY = 'cystackapiexample'
+AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
+
+
+def list_scan():
+    endpoint = "%s/v1/scans" % ROOT_URL
+    r = requests.get(endpoint, headers=AUTHENTICATION_HEADER)
+    return json.loads(r.text)
 ```
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
+curl "https://api.cystack.io/v1/scans"
+  -H "Authorization: Bearer cystackapiexample"
 ```
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
+> Nếu thành công, kết quả nhận được sẽ là JSON như sau:
 
 ```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+{  
+   "count":1,
+   "next":null,
+   "previous":null,
+   "results":[  
+      {  
+         "status":"Stopped",
+         "profile":"Full Audit",
+         "vulnerabilities":0,
+         "start_time":"13:58:01 20/11/2017",
+         "href":"/v1/scans/07c13583-a14d-43b7-814d-a8f6db64253d",
+         "target":{  
+            "ip":"42.112.22.134",
+            "os":"Unknown",
+            "id":"03c0e5ad-767e-4c86-8adb-85509965fd54",
+            "address":"https://cystack.net"
+         }
+      }
+   ]
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+Endpoint này liệt kê tất cả các scan hiện có của user (ứng với API key)
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET https://api.cystack.io/v1/scans`
 
-### URL Parameters
+### Các tham số theo URL
 
-Parameter | Description
+Tham số | Mô tả
 --------- | -----------
-ID | The ID of the kitten to retrieve
+page | Mặc định, kết quả trả về sẽ được phân trang với 10 kết quả/trang. Tham số page nhận vào một số tự nhiên đại diện cho trang cần lấy
+q | Từ khóa dùng để lọc target
+ordering | Giá trị được ưu tiên sắp xếp. Giá trị tham số hợp lệ `?ordering=target`, `?ordering=start_time`, `?ordering=vulnerabilities`, `?ordering=target,start_time,vulnerabilities`. Nếu muốn sắp xếp theo chiều ngược lại, thêm dấu `-` vào trước giá trị cần sắp xếp chẳng hạn `?ordering=-target`
+status | Lọc theo trạng thái của scan, các giá trị hợp lệ bao gồm `Stopped`, `Running`, `Stopping`, `Queued`
 
-## Delete a Specific Kitten
+### Ý nghĩa kết quả trả về
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
-
-This endpoint deletes a specific kitten.
-
-### HTTP Request
-
-`DELETE http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
+Key | Mô tả
 --------- | -----------
-ID | The ID of the kitten to delete
+count | Số lượng kết quả lấy được
+next | URL trang kết quả tiếp theo, nếu trang tiếp theo không có dữ liệu thì trả về `null`
+previous | URL trang kết quả phía trước, nếu trang trước không có dữ liệu thì trả về `null`
+results | Một mảng các đối tượng scan, trong đó các thành phần được mô tả dưới đây
+profile | Tên profile scan được sử dụng trong scan này
+vulnerabilities | Số lượng lỗ hổng tìm thấy
+start_time | Thời gian bắt đầu scan
+href | Đường dẫn đến endpoint xem thông tin chi tiết scan. Địa chỉ tuyệt đối = `https://api.cystack.io` + `đường dẫn`
+target | Một dictionary chứa các thông tin của target
+ip | IP của target
+os | Hệ điều hành mà target đang sử dụng, trong trường hợp không xác định được thì trả về `Unknown`
+id | ID của target
+address | Địa chỉ của target
 
+<aside class="notice">
+Lưu ý — Request phải gửi kèm API Key
+</aside>
