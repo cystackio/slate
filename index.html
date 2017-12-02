@@ -240,6 +240,9 @@
                     <a href="#khai-ni-m" class="toc-h2 toc-link" data-title="Khái niệm">Khái niệm</a>
                   </li>
                   <li>
+                    <a href="#t-o-scan" class="toc-h2 toc-link" data-title="Tạo scan">Tạo scan</a>
+                  </li>
+                  <li>
                     <a href="#li-t-ke-scan" class="toc-h2 toc-link" data-title="Liệt kê scan">Liệt kê scan</a>
                   </li>
                   <li>
@@ -439,6 +442,127 @@ Lưu ý — Request phải gửi kèm API Key
 </aside>
 <h1 id='scan'>Scan</h1><h2 id='khai-ni-m'>Khái niệm</h2>
 <p>Một scan tương ứng với một lần quét lỗ hổng, trên một target xác định</p>
+<h2 id='t-o-scan'>Tạo scan</h2><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">create_scan</span><span class="p">():</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="s">"</span><span class="si">%</span><span class="s">s/scans"</span> <span class="o">%</span> <span class="n">ROOT_URL</span>
+    <span class="n">post_data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"target"</span><span class="p">:</span> <span class="s">"395a2f59-ad32-4e1c-b9b0-4063a55cf4e2"</span><span class="p">,</span>
+        <span class="s">"profile"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s">"notification"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="mi">34</span>
+        <span class="p">],</span>
+        <span class="s">"description"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
+        <span class="s">"advances"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">"headers"</span><span class="p">:</span> <span class="p">{</span><span class="s">"ping"</span><span class="p">:</span> <span class="s">"123"</span><span class="p">},</span>
+            <span class="s">"authentication"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">"authentication_method"</span><span class="p">:</span> <span class="s">"cookie"</span><span class="p">,</span>
+                <span class="s">"username"</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span>
+                <span class="s">"password"</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span>
+                <span class="s">"log_out_url"</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span>
+                <span class="s">"cookie"</span><span class="p">:</span> <span class="s">"cookieeeeeeeeeeeeeeeeee"</span><span class="p">,</span>
+                <span class="s">"username_field"</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span>
+                <span class="s">"password_field"</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span>
+                <span class="s">"auth_url"</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span>
+                <span class="s">"check_url"</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span>
+                <span class="s">"check_string"</span><span class="p">:</span> <span class="s">""</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">AUTHENTICATION_HEADER</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">post_data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">201</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">'Location'</span><span class="p">]</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="k">print</span> <span class="n">create_scan</span><span class="p">()</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl -i -s -k  -X <span class="s1">$'POST'</span> <span class="se">\</span>
+    -H <span class="s1">$'Authorization: Bearer cystackapiexample'</span> -H <span class="s1">$'content-type: application/json'</span> <span class="se">\</span>
+    --data-binary <span class="s1">$'{</span><span class="se">\"</span><span class="s1">target</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"</span><span class="s1">395a2f59-ad32-4e1c-b9b0-4063a55cf4e2</span><span class="se">\"</span><span class="s1">,</span><span class="se">\"</span><span class="s1">profile</span><span class="se">\"</span><span class="s1">: 5,</span><span class="se">\"</span><span class="s1">notification</span><span class="se">\"</span><span class="s1">: [34],</span><span class="se">\"</span><span class="s1">description</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"</span><span class="s1">string</span><span class="se">\"</span><span class="s1">,</span><span class="se">\"</span><span class="s1">advances</span><span class="se">\"</span><span class="s1">: {</span><span class="se">\"</span><span class="s1">headers</span><span class="se">\"</span><span class="s1">: {</span><span class="se">\"</span><span class="s1">ping</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"</span><span class="s1">123</span><span class="se">\"</span><span class="s1">},</span><span class="se">\"</span><span class="s1">authentication</span><span class="se">\"</span><span class="s1">: {</span><span class="se">\"</span><span class="s1">authentication_method</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"</span><span class="s1">cookie</span><span class="se">\"</span><span class="s1">,</span><span class="se">\"</span><span class="s1">username</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"\"</span><span class="s1">,</span><span class="se">\"</span><span class="s1">password</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"\"</span><span class="s1">,</span><span class="se">\"</span><span class="s1">log_out_url</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"\"</span><span class="s1">,</span><span class="se">\"</span><span class="s1">cookie</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"</span><span class="s1">cookieeeeeeeeeeeeeeeeee</span><span class="se">\"</span><span class="s1">,</span><span class="se">\"</span><span class="s1">username_field</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"\"</span><span class="s1">,</span><span class="se">\"</span><span class="s1">password_field</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"\"</span><span class="s1">,</span><span class="se">\"</span><span class="s1">auth_url</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"\"</span><span class="s1">,</span><span class="se">\"</span><span class="s1">check_url</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"\"</span><span class="s1">,</span><span class="se">\"</span><span class="s1">check_string</span><span class="se">\"</span><span class="s1">: </span><span class="se">\"\"</span><span class="s1">}}}'</span> <span class="se">\</span>
+    <span class="s1">$'https://api.cystack.io/v1/scans'</span>
+</code></pre>
+<blockquote>
+<p>Nếu thành công, HTTP Response sẽ có Status code 201 và trong header chứa location tham chiếu đến đối tượng mới được tạo</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="err">'Location'</span><span class="p">:</span><span class="w"> </span><span class="err">'/v</span><span class="mi">1</span><span class="err">/scans/</span><span class="mi">65</span><span class="err">fa</span><span class="mi">9150</span><span class="err">-fbca</span><span class="mi">-49</span><span class="err">ce-bac</span><span class="mi">6-586</span><span class="err">e</span><span class="mi">58</span><span class="err">cd</span><span class="mi">36</span><span class="err">f</span><span class="mi">5</span><span class="err">'</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Endpoint này cho phép tạo mới 1 scan</p>
+<h3 id='http-request-2'>HTTP Request</h3>
+<p><code>POST https://api.cystack.io/v1/scans</code></p>
+<h3 id='cac-tham-s-trong-json-body'>Các tham số trong JSON Body</h3>
+<table><thead>
+<tr>
+<th>Tham số</th>
+<th>Mô tả</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>target</td>
+<td>ID của target cần Scan (String)</td>
+</tr>
+<tr>
+<td>profile</td>
+<td>Profile Scan (Integer)</td>
+</tr>
+<tr>
+<td>notification</td>
+<td>Danh sách người nhận thông báo (Integer List)</td>
+</tr>
+<tr>
+<td>description</td>
+<td>Thông tin mô tả về scan (String)</td>
+</tr>
+<tr>
+<td>advances</td>
+<td>Các thông tin nâng cao khác, tùy chọn (Object)</td>
+</tr>
+<tr>
+<td>headers</td>
+<td>Danh sách các header muốn thêm vào trong request (Dictionary)</td>
+</tr>
+<tr>
+<td>authentication</td>
+<td>Thông tin xác thực (Object)</td>
+</tr>
+<tr>
+<td>authentication_method</td>
+<td>Kiểu xác thực, các giá trị hợp lệ bao gồm <code>form</code>, <code>cookie</code>, <code>basic</code></td>
+</tr>
+<tr>
+<td>username</td>
+<td>Tên đăng nhập (String)</td>
+</tr>
+<tr>
+<td>password</td>
+<td>Password (String)</td>
+</tr>
+<tr>
+<td>log_out_url</td>
+<td>URL logout, dùng để tránh crawl địa chỉ này (String)</td>
+</tr>
+<tr>
+<td>cookie</td>
+<td>Giá trị cookie (String)</td>
+</tr>
+<tr>
+<td>username_field</td>
+<td>Tên biến ứng với username trong form authentication (String)</td>
+</tr>
+<tr>
+<td>password_field</td>
+<td>Tên biến ứng với password trong form authentication (String)</td>
+</tr>
+<tr>
+<td>auth_url</td>
+<td>URL login (String)</td>
+</tr>
+<tr>
+<td>check_url</td>
+<td>URL bất kỳ chứa <code>check_string</code>, đây là URL chỉ nhìn thấy được sau khi xác thực thành công (String)</td>
+</tr>
+<tr>
+<td>check_string</td>
+<td>Từ khóa, chuỗi muốn kiểm tra có tồn tại hay không (String)</td>
+</tr>
+</tbody></table>
 <h2 id='li-t-ke-scan'>Liệt kê scan</h2><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
@@ -479,7 +603,7 @@ Lưu ý — Request phải gửi kèm API Key
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Endpoint này liệt kê tất cả các scan hiện có của user (ứng với API key)</p>
-<h3 id='http-request-2'>HTTP Request</h3>
+<h3 id='http-request-3'>HTTP Request</h3>
 <p><code>GET https://api.cystack.io/v1/scans</code></p>
 <h3 id='cac-tham-s-theo-url-2'>Các tham số theo URL</h3>
 <table><thead>
@@ -607,7 +731,7 @@ Lưu ý — Request phải gửi kèm API Key
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Endpoint này trả về thông tin chi tiết của 1 scan</p>
-<h3 id='http-request-3'>HTTP Request</h3>
+<h3 id='http-request-4'>HTTP Request</h3>
 <p><code>GET https://api.cystack.io/v1/scans/&lt;scan_id&gt;</code></p>
 <h3 id='y-nghia-k-t-qu-tr-v-3'>Ý nghĩa kết quả trả về</h3>
 <table><thead>
@@ -706,7 +830,7 @@ Lưu ý — Request phải gửi kèm API Key
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Endpoint này liệt kê tất cả các lỗ hổng hiện có của user (ứng với API key)</p>
-<h3 id='http-request-4'>HTTP Request</h3>
+<h3 id='http-request-5'>HTTP Request</h3>
 <p><code>GET https://api.cystack.io/v1/vulnerabilities</code></p>
 <h3 id='cac-tham-s-theo-url-3'>Các tham số theo URL</h3>
 <table><thead>
@@ -845,7 +969,7 @@ Lưu ý — Request phải gửi kèm API Key
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Endpoint này trả về thông tin chi tiết của 1 vulnerability</p>
-<h3 id='http-request-5'>HTTP Request</h3>
+<h3 id='http-request-6'>HTTP Request</h3>
 <p><code>GET https://api.cystack.io/v1/vulnerabilities/&lt;vuln_id&gt;</code></p>
 <h3 id='y-nghia-k-t-qu-tr-v-5'>Ý nghĩa kết quả trả về</h3>
 <table><thead>
@@ -974,9 +1098,9 @@ Lưu ý — Request phải gửi kèm API Key
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Endpoint này giúp cập nhật trạng thái <code>false_positive</code> của một lỗi</p>
-<h3 id='http-request-6'>HTTP Request</h3>
+<h3 id='http-request-7'>HTTP Request</h3>
 <p><code>PUT https://api.cystack.io/v1/vulnerabilities/&lt;vuln_id&gt;</code></p>
-<h3 id='cac-tham-s-trong-json-body'>Các tham số trong json body</h3>
+<h3 id='cac-tham-s-trong-json-body-2'>Các tham số trong json body</h3>
 <table><thead>
 <tr>
 <th>Tham số</th>
