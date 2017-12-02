@@ -134,6 +134,14 @@ Một scan tương ứng với một lần quét lỗ hổng, trên một target
 ## Tạo scan
 
 ```python
+import requests
+import json
+
+ROOT_URL = 'https://api.cystack.io/v1'
+API_KEY = 'cystackapiexample'
+AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
+
+
 def create_scan():
     endpoint = "%s/scans" % ROOT_URL
     post_data = {
