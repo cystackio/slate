@@ -442,7 +442,15 @@ Lưu ý — Request phải gửi kèm API Key
 </aside>
 <h1 id='scan'>Scan</h1><h2 id='khai-ni-m'>Khái niệm</h2>
 <p>Một scan tương ứng với một lần quét lỗ hổng, trên một target xác định</p>
-<h2 id='t-o-scan'>Tạo scan</h2><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">create_scan</span><span class="p">():</span>
+<h2 id='t-o-scan'>Tạo scan</h2><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">ROOT_URL</span> <span class="o">=</span> <span class="s">'https://api.cystack.io/v1'</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="s">'cystackapiexample'</span>
+<span class="n">AUTHENTICATION_HEADER</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Authorization'</span><span class="p">:</span> <span class="s">'Bearer </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">API_KEY</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">create_scan</span><span class="p">():</span>
     <span class="n">endpoint</span> <span class="o">=</span> <span class="s">"</span><span class="si">%</span><span class="s">s/scans"</span> <span class="o">%</span> <span class="n">ROOT_URL</span>
     <span class="n">post_data</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">"target"</span><span class="p">:</span> <span class="s">"395a2f59-ad32-4e1c-b9b0-4063a55cf4e2"</span><span class="p">,</span>
