@@ -178,7 +178,7 @@ curl -i -s -k  -X $'POST' \
 > Nếu thành công, HTTP Response sẽ có Status code 201 và trong header chứa location tham chiếu đến đối tượng mới được tạo
 
 ```json
-{'Location': '/v1/scans/65fa9150-fbca-49ce-bac6-586e58cd36f5'}
+{"Location": "/v1/scans/65fa9150-fbca-49ce-bac6-586e58cd36f5"}
 ```
 
 Endpoint này cho phép tạo mới 1 scan
