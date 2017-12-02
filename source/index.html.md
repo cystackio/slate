@@ -441,6 +441,42 @@ os | Hệ điều hành mà target đang sử dụng, trong trường hợp khô
 id | ID của target
 address | Địa chỉ của target
 
+## Xóa một scan
+
+```python
+import requests
+import json
+
+ROOT_URL = 'https://api.cystack.io/v1'
+API_KEY = 'cystackapiexample'
+AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
+
+
+def delete_scan(scan_id):
+    endpoint = "%s/scans/%s" % (ROOT_URL, scan_id)
+    r = requests.delete(endpoint, headers=AUTHENTICATION_HEADER)
+    if r.status_code == 204:
+        return True
+    return False
+    
+print delete_scan("9ba42a5f-f31d-4f18-9812-c7f18eca09e8")
+```
+
+```shell
+curl -i -s -k  -X $'DELETE' \
+    -H $'Authorization: Bearer cystackapiexample' -H $'content-type: application/json' \
+    $'https://api.cystack.io/v1/scans/098d3ca7-d461-4f15-ad17-909158a41966'
+```
+
+> Nếu thành công, HTTP Response sẽ có Status code `204` No Content và không có Response Body
+
+Endpoint này cho phép xóa 1 scan
+
+### HTTP Request
+
+`DELETE https://api.cystack.io/v1/scans/<scan_id>`
+
+
 # Vulnerability
 
 ## Khái niệm
