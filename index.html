@@ -251,6 +251,9 @@
                   <li>
                     <a href="#xem-chi-ti-t-m-t-scan" class="toc-h2 toc-link" data-title="Xem chi tiết một scan">Xem chi tiết một scan</a>
                   </li>
+                  <li>
+                    <a href="#xoa-m-t-scan" class="toc-h2 toc-link" data-title="Xóa một scan">Xóa một scan</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -900,6 +903,33 @@ Lưu ý — Request phải gửi kèm API Key
 <td>Địa chỉ của target</td>
 </tr>
 </tbody></table>
+<h2 id='xoa-m-t-scan'>Xóa một scan</h2><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">ROOT_URL</span> <span class="o">=</span> <span class="s">'https://api.cystack.io/v1'</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="s">'cystackapiexample'</span>
+<span class="n">AUTHENTICATION_HEADER</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Authorization'</span><span class="p">:</span> <span class="s">'Bearer </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">API_KEY</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">delete_scan</span><span class="p">(</span><span class="n">scan_id</span><span class="p">):</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="s">"</span><span class="si">%</span><span class="s">s/scans/</span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">ROOT_URL</span><span class="p">,</span> <span class="n">scan_id</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">AUTHENTICATION_HEADER</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">204</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">print</span> <span class="n">delete_scan</span><span class="p">(</span><span class="s">"9ba42a5f-f31d-4f18-9812-c7f18eca09e8"</span><span class="p">)</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl -i -s -k  -X <span class="s1">$'DELETE'</span> <span class="se">\</span>
+    -H <span class="s1">$'Authorization: Bearer cystackapiexample'</span> -H <span class="s1">$'content-type: application/json'</span> <span class="se">\</span>
+    <span class="s1">$'https://api.cystack.io/v1/scans/098d3ca7-d461-4f15-ad17-909158a41966'</span>
+</code></pre>
+<blockquote>
+<p>Nếu thành công, HTTP Response sẽ có Status code <code>204</code> No Content và không có Response Body</p>
+</blockquote>
+
+<p>Endpoint này cho phép xóa 1 scan</p>
+<h3 id='http-request-6'>HTTP Request</h3>
+<p><code>DELETE https://api.cystack.io/v1/scans/&lt;scan_id&gt;</code></p>
 <h1 id='vulnerability'>Vulnerability</h1><h2 id='khai-ni-m-2'>Khái niệm</h2>
 <p>Một Vulnerability tương ứng với một lỗ hổng tìm được sau khi scan</p>
 <h2 id='li-t-ke-l-h-ng'>Liệt kê lỗ hổng</h2><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
@@ -941,7 +971,7 @@ Lưu ý — Request phải gửi kèm API Key
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Endpoint này liệt kê tất cả các lỗ hổng hiện có của user (ứng với API key)</p>
-<h3 id='http-request-6'>HTTP Request</h3>
+<h3 id='http-request-7'>HTTP Request</h3>
 <p><code>GET https://api.cystack.io/v1/vulnerabilities</code></p>
 <h3 id='cac-tham-s-theo-url-3'>Các tham số theo URL</h3>
 <table><thead>
@@ -1080,7 +1110,7 @@ Lưu ý — Request phải gửi kèm API Key
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Endpoint này trả về thông tin chi tiết của 1 vulnerability</p>
-<h3 id='http-request-7'>HTTP Request</h3>
+<h3 id='http-request-8'>HTTP Request</h3>
 <p><code>GET https://api.cystack.io/v1/vulnerabilities/&lt;vuln_id&gt;</code></p>
 <h3 id='y-nghia-k-t-qu-tr-v-6'>Ý nghĩa kết quả trả về</h3>
 <table><thead>
@@ -1209,7 +1239,7 @@ Lưu ý — Request phải gửi kèm API Key
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Endpoint này giúp cập nhật trạng thái <code>false_positive</code> của một lỗi</p>
-<h3 id='http-request-8'>HTTP Request</h3>
+<h3 id='http-request-9'>HTTP Request</h3>
 <p><code>PUT https://api.cystack.io/v1/vulnerabilities/&lt;vuln_id&gt;</code></p>
 <h3 id='cac-tham-s-trong-json-body-2'>Các tham số trong json body</h3>
 <table><thead>
