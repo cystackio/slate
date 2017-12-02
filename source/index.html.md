@@ -350,7 +350,7 @@ Endpoint này cho phép dừng 1 scan đang chạy
 
 ### HTTP Request
 
-`GET https://api.cystack.io/v1/scans/<scan_id>`
+`GET https://api.cystack.io/v1/scans/<scan_id>/stop`
 
 ### Ý nghĩa kết quả trả về
 
