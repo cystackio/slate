@@ -131,6 +131,84 @@ Lưu ý — Request phải gửi kèm API Key
 ## Khái niệm
 Một scan tương ứng với một lần quét lỗ hổng, trên một target xác định
 
+## Tạo scan
+
+```python
+def create_scan():
+    endpoint = "%s/scans" % ROOT_URL
+    post_data = {
+        "target": "395a2f59-ad32-4e1c-b9b0-4063a55cf4e2",
+        "profile": 5,
+        "notification": [
+            34
+        ],
+        "description": "string",
+        "advances": {
+            "headers": {"ping": "123"},
+            "authentication": {
+                "authentication_method": "cookie",
+                "username": "",
+                "password": "",
+                "log_out_url": "",
+                "cookie": "cookieeeeeeeeeeeeeeeeee",
+                "username_field": "",
+                "password_field": "",
+                "auth_url": "",
+                "check_url": "",
+                "check_string": ""
+            }
+        }
+    }
+
+    r = requests.post(endpoint, headers=AUTHENTICATION_HEADER, json=post_data)
+    if r.status_code == 201:
+        return r.headers['Location']
+    return None
+
+print create_scan()
+```
+
+```shell
+curl -i -s -k  -X $'POST' \
+    -H $'Authorization: Bearer cystackapiexample' -H $'content-type: application/json' \
+    --data-binary $'{\"target\": \"395a2f59-ad32-4e1c-b9b0-4063a55cf4e2\",\"profile\": 5,\"notification\": [34],\"description\": \"string\",\"advances\": {\"headers\": {\"ping\": \"123\"},\"authentication\": {\"authentication_method\": \"cookie\",\"username\": \"\",\"password\": \"\",\"log_out_url\": \"\",\"cookie\": \"cookieeeeeeeeeeeeeeeeee\",\"username_field\": \"\",\"password_field\": \"\",\"auth_url\": \"\",\"check_url\": \"\",\"check_string\": \"\"}}}' \
+    $'https://api.cystack.io/v1/scans'
+```
+
+> Nếu thành công, HTTP Response sẽ có Status code 201 và trong header chứa location tham chiếu đến đối tượng mới được tạo
+
+```json
+{'Location': '/v1/scans/65fa9150-fbca-49ce-bac6-586e58cd36f5'}
+```
+
+Endpoint này cho phép tạo mới 1 scan
+
+### HTTP Request
+
+`POST https://api.cystack.io/v1/scans`
+
+### Các tham số trong JSON Body
+
+Tham số | Mô tả
+--------- | -----------
+target | ID của target cần Scan (String)
+profile | Profile Scan (Integer)
+notification | Danh sách người nhận thông báo (Integer List)
+description | Thông tin mô tả về scan (String)
+advances | Các thông tin nâng cao khác, tùy chọn (Object)
+headers | Danh sách các header muốn thêm vào trong request (Dictionary)
+authentication | Thông tin xác thực (Object)
+authentication_method | Kiểu xác thực, các giá trị hợp lệ bao gồm `form`, `cookie`, `basic`
+username | Tên đăng nhập (String)
+password | Password (String)
+log_out_url | URL logout, dùng để tránh crawl địa chỉ này (String)
+cookie | Giá trị cookie (String)
+username_field | Tên biến ứng với username trong form authentication (String)
+password_field | Tên biến ứng với password trong form authentication (String)
+auth_url | URL login (String)
+check_url | URL bất kỳ chứa `check_string`, đây là URL chỉ nhìn thấy được sau khi xác thực thành công (String)
+check_string | Từ khóa, chuỗi muốn kiểm tra có tồn tại hay không (String)
+
 ## Liệt kê scan
 
 ```python
