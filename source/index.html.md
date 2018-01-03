@@ -590,7 +590,8 @@ curl "https://api.cystack.io/v1/vulnerabilities/060d674c-fb48-4182-83db-85e0323b
   "traffic_hrefs": [
     "/v1/vulnerabilities/060d674c-fb48-4182-83db-85e0323b8fd1/traffics/5a1b8babcca1e02c146c4afa"
   ],
-  "description": "The whole target has no protection (X-Frame-Options header) against Click-Jacking attacksClickjacking (User Interface redress attack, UI redress attack, UI redressing) is a malicious technique of tricking a Web user into clicking on something different from what the user perceives they are clicking on, thus potentially revealing confidential information or taking control of their computer while clicking on seemingly innocuous web pages.\n\nThe server didn't return an `X-Frame-Options` header which means that this website could be at risk of a clickjacking attack. The `X-Frame-Options` HTTP response header can be used to indicate whether or not a browser should be allowed to render a page inside a frame or iframe. Sites can use this to avoid clickjacking attacks, by ensuring that their content is not embedded into other sites.",
+  "description": "The whole target has no protection (X-Frame-Options header) against Click-Jacking attacksClickjacking (User Interface redress attack, UI redress attack, UI redressing) is a malicious technique of tricking a Web user into clicking on something different from what the user perceives they are clicking on, thus potentially revealing confidential information or taking control of their computer while clicking on seemingly innocuous web pages.",
+  "long_description": "The server didn't return an `X-Frame-Options` header which means that this website could be at risk of a clickjacking attack. The `X-Frame-Options` HTTP response header can be used to indicate whether or not a browser should be allowed to render a page inside a frame or iframe. Sites can use this to avoid clickjacking attacks, by ensuring that their content is not embedded into other sites.",
   "scan": {
     "target": {
       "id": "395a2f59-ad32-4e1c-b9b0-4063a55cf4e2",
@@ -642,6 +643,7 @@ Key | Mô tả
 --------- | -----------
 traffic_hrefs | Danh sách href các traffic của vulnerability
 description | Mô tả về lỗi
+long_description | Mô tả thêm về loại lỗi
 severity | Mức độ nguy hiểm của vulnerability
 solution | Cách xử lý vulnerability
 plugin_name | Tên plugin phát hiện ra lỗi
@@ -688,7 +690,8 @@ curl -i -s -k  -X 'PUT' "https://api.cystack.io/v1/vulnerabilities/060d674c-fb48
   "traffic_hrefs": [
     "/v1/vulnerabilities/060d674c-fb48-4182-83db-85e0323b8fd1/traffics/5a1b8babcca1e02c146c4afa"
   ],
-  "description": "The whole target has no protection (X-Frame-Options header) against Click-Jacking attacksClickjacking (User Interface redress attack, UI redress attack, UI redressing) is a malicious technique of tricking a Web user into clicking on something different from what the user perceives they are clicking on, thus potentially revealing confidential information or taking control of their computer while clicking on seemingly innocuous web pages.\n\nThe server didn't return an `X-Frame-Options` header which means that this website could be at risk of a clickjacking attack. The `X-Frame-Options` HTTP response header can be used to indicate whether or not a browser should be allowed to render a page inside a frame or iframe. Sites can use this to avoid clickjacking attacks, by ensuring that their content is not embedded into other sites.",
+  "description": "The whole target has no protection (X-Frame-Options header) against Click-Jacking attacksClickjacking (User Interface redress attack, UI redress attack, UI redressing) is a malicious technique of tricking a Web user into clicking on something different from what the user perceives they are clicking on, thus potentially revealing confidential information or taking control of their computer while clicking on seemingly innocuous web pages.",
+  "long_description": "The server didn't return an `X-Frame-Options` header which means that this website could be at risk of a clickjacking attack. The `X-Frame-Options` HTTP response header can be used to indicate whether or not a browser should be allowed to render a page inside a frame or iframe. Sites can use this to avoid clickjacking attacks, by ensuring that their content is not embedded into other sites.",
   "scan": {
     "target": {
       "id": "395a2f59-ad32-4e1c-b9b0-4063a55cf4e2",
@@ -746,6 +749,7 @@ Key | Mô tả
 --------- | -----------
 traffic_hrefs | Danh sách href các traffic của vulnerability
 description | Mô tả về lỗi
+long_description | Mô tả thêm về loại lỗi
 severity | Mức độ nguy hiểm của vulnerability
 solution | Cách xử lý vulnerability
 plugin_name | Tên plugin phát hiện ra lỗi
@@ -757,3 +761,195 @@ var | Tham số chứa lỗi
 attributes | Các thuộc tính của lỗi (nâng cao)
 id | ID của lỗi
 name | Tên của lỗi
+
+# Monitoring
+
+## Khái niệm
+Monitoring là chức năng giám sát tình trạng hoạt động của website, gồm tình trạng up/down và tình trạng an ninh
+
+## Lấy thông tin về trạng thái up/down
+
+```python
+import requests
+import json
+
+ROOT_URL = 'https://api.cystack.io/v1'
+API_KEY = 'cystackapiexample'
+AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
+
+
+def up_down(target_id):
+    endpoint = "%s/targets/%s/monitor_result" % (ROOT_URL, target_id)
+    r = requests.get(endpoint, headers=AUTHENTICATION_HEADER)
+    return json.loads(r.text)
+
+
+print up_down("de3b1674-a507-4293-a360-50f8ffe3a921")
+```
+
+```shell
+curl "https://api.cystack.io/v1/targets/de3b1674-a507-4293-a360-50f8ffe3a921/monitor_result"
+  -H "Authorization: Bearer cystackapiexample"
+```
+
+> Nếu thành công, kết quả nhận được sẽ là JSON như sau:
+
+```json
+[
+  {
+    "url": "https://cystack.net",
+    "status_code": 200,
+    "start_time": 1514969894,
+    "target_id": "de3b1674-a507-4293-a360-50f8ffe3a921",
+    "is_up": true,
+    "timeout": 30,
+    "id": "5a4c9b2608b54160f50f4e64",
+    "response_time": 0.5933599472045898,
+    "notify": false
+  }
+]
+```
+
+Endpoint này cho phép truy vấn tình trạng Up/Down của 1 target. Số lượng phần tử trong mảng trả về tương ứng với số thời điểm kiểm tra, trong khoảng thời gian từ `now - interval_time * 30` đến `now` (`now` là thời điểm hiện tại)
+
+### HTTP Request
+
+`GET https://api.cystack.io/v1/targets/<target_id>/monitor_result`
+
+### Các tham số theo URL
+
+Tham số | Mô tả
+--------- | -----------
+target_id | ID của target
+
+### Ý nghĩa kết quả trả về
+
+Key | Mô tả
+--------- | -----------
+url | Địa chỉ target (String)
+status_code | HTTP Code trả về khi request đến địa chỉ trên (Integer)
+start_time | Thời điểm request kiểm tra (Unix Time Stamp)
+target_id | ID của target (String)
+is_up | Trạng thái up/down (Boolean)
+timeout | Thời gian timeout khi request (Second)
+id | ID của lượt request (String)
+response_time | Thời gian phản hồi của target (Float, second)
+notify | Gửi cảnh báo đến người dùng hay không (Boolean)
+
+## Lấy thông tin cấu hình kiểm tra up/down
+
+```python
+import requests
+import json
+
+ROOT_URL = 'https://api.cystack.io/v1'
+API_KEY = 'cystackapiexample'
+AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
+
+
+def get_settings(target_id):
+    endpoint = "%s/targets/%s/monitoring" % (ROOT_URL, target_id)
+    r = requests.get(endpoint, headers=AUTHENTICATION_HEADER)
+    return json.loads(r.text)
+
+
+print get_settings("de3b1674-a507-4293-a360-50f8ffe3a921")
+```
+
+```shell
+curl "https://api.cystack.io/v1/targets/de3b1674-a507-4293-a360-50f8ffe3a921/monitoring"
+  -H "Authorization: Bearer cystackapiexample"
+```
+
+> Nếu thành công, kết quả nhận được sẽ là JSON như sau:
+
+```json
+{
+  "interval": 5,
+  "is_activated": true,
+  "notifications": [
+    20
+  ]
+}
+```
+
+Endpoint này cho phép truy vấn các cấu hình được thiết lập để kiểm tra tình trạng up/down của target
+
+### HTTP Request
+
+`GET https://api.cystack.io/v1/targets/<target_id>/monitoring`
+
+### Các tham số theo URL
+
+Tham số | Mô tả
+--------- | -----------
+target_id | ID của target
+
+### Ý nghĩa kết quả trả về
+
+Key | Mô tả
+--------- | -----------
+interval | Khoảng thời gian giữa 2 lần kiểm tra gần nhất (Integer, Minute)
+is_activated | Kích hoạt hay không việc kiểm tra up/down cho target (Boolean)
+notifications | Danh sách ID của những người nhận email thông báo (Array Integer)
+
+## Cập nhật cấu hình kiểm tra up/down
+
+```python
+import requests
+import json
+
+ROOT_URL = 'https://api.cystack.io/v1'
+API_KEY = 'cystackapiexample'
+AUTHENTICATION_HEADER = {'Authorization': 'Bearer %s' % API_KEY}
+
+
+def update_settings(data):
+    endpoint = "%s/targets/%s/monitoring" % (ROOT_URL, data['target_id'])
+    payload = {"interval": data["interval"], "is_activated": data["is_activated"],
+               "notifications": data["notifications"]}
+    r = requests.put(endpoint, headers=AUTHENTICATION_HEADER, json=payload)
+    return json.loads(r.text)
+
+
+print update_settings(data = {"target_id": "de3b1674-a507-4293-a360-50f8ffe3a921", "interval": 10, "is_activated": 0, "notifications": [20]})
+```
+
+```shell
+curl -i -s -k  -X $'PUT' \
+    -H $'Authorization: Bearer cystackapiexample' -H $'content-type: application/json' \
+    --data-binary $'{\"interval\":10,\"is_activated\":false,\"notifications\":[20]}' \
+    $'https://api.cystack.io/v1/targets/de3b1674-a507-4293-a360-50f8ffe3a921/monitoring'
+```
+
+> Nếu thành công, kết quả nhận được sẽ là JSON như sau:
+
+```json
+{
+  "interval": 5,
+  "is_activated": true,
+  "notifications": [
+    20
+  ]
+}
+```
+
+Endpoint này cho phép thiết lập lại các cấu hình kiểm tra tình trạng up/down của target
+
+### HTTP Request
+
+`PUT https://api.cystack.io/v1/targets/<target_id>/monitoring`
+
+### Các tham số theo URL
+
+Tham số | Mô tả
+--------- | -----------
+target_id | ID của target
+
+### Ý nghĩa kết quả trả về
+
+Key | Mô tả
+--------- | -----------
+interval | Khoảng thời gian giữa 2 lần kiểm tra gần nhất (Integer, Minute)
+is_activated | Kích hoạt hay không việc kiểm tra up/down cho target (Boolean)
+notifications | Danh sách ID của những người nhận email thông báo (Array Integer)
